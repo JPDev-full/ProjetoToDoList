@@ -7,6 +7,7 @@ const rl = readline.createInterface({
 
 let tasks = [];
 
+// Exibe todas as tarefas
 function displayTasks() {
   console.log("Lista de Tarefas:");
   tasks.forEach((task, index) => {
@@ -15,45 +16,52 @@ function displayTasks() {
   console.log();
 }
 
+// Adiciona uma nova tarefa
 function addTask(task) {
   try {
-    if (task==="") {
-      throw new Error("\nErro: A tarefa não pode estar vazia!\n")
+    if (task === "") {
+      throw new Error("\nErro: A tarefa não pode estar vazia!\n");
     }
     tasks.push(task);
     console.log(`\n"${task}" foi adicionado à lista.`);
   } catch (e) {
-    console.log(e.message)
+    console.log(e.message);
   }
-  
 }
 
+// Edita uma tarefa existente
 function editTask(id, updatedTask) {
- try {
-    if (!(id != "" && id >= 0 && id < tasks.length && Number.isInteger(id) )){
+  try {
+    if (!(id != "" && id >= 0 && id < tasks.length && Number.isInteger(id))) {
       throw new Error(`\nErro: ID inválido.\n`);
-    } 
+    }
     if (updatedTask === "") {
-      throw new Error("\nErro: A atualização da tarefa não pode estar vazia!\n")
+      throw new Error(
+        "\nErro: A atualização da tarefa não pode estar vazia!\n"
+      );
     }
     tasks[id] = updatedTask;
     console.log(`\nTarefa [${id}] atualizada para "${updatedTask}".`);
- } catch (e) {
-      console.log(e.message)
-
- } 
-
-}
-
-function removeTask(id) {
-  if (id >= 0 && id < tasks.length) {
-    const removedTask = tasks.splice(id, 1);
-    console.log(`\nTarefa [${id}] "${removedTask}" removida.`);
-  } else {
-    console.log(`ID inválido.`);
+  } catch (e) {
+    console.log(e.message);
   }
 }
 
+// Remove uma tarefa com base em seu ID
+function removeTask(id) {
+  try {
+    if (id >= 0 && id < tasks.length) {
+      const removedTask = tasks.splice(id, 1);
+      console.log(`\nTarefa [${id}] "${removedTask}" removida.`);
+    } else {
+      throw new Error("Erro: ID inválido.");
+    }
+  } catch (e) {
+    console.error(e.message);
+  }
+}
+
+// Obtem uma tarefa com base em seu ID
 function getTaskById(id) {
   try {
     if (id < 0 || id >= tasks.length || !Number.isInteger(id)) {
@@ -66,6 +74,7 @@ function getTaskById(id) {
   }
 }
 
+// Exibe um menu para o usuário e executa a ação selecionada
 function promptForAction() {
   rl.question(
     "Escolha uma opção:\n1 - Adicionar Tarefa\n2 - Editar Tarefa\n3 - Remover Tarefa\n4 - Listar Todas as Tarefas\n5 - Visualizar Tarefa Unica\n0 - Sair\n\nEscolha uma opção: ",
