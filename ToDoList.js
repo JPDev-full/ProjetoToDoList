@@ -9,7 +9,7 @@ let tasks = [];
 
 // Exibe todas as tarefas
 function displayTasks() {
-  console.log("Lista de Tarefas:");
+  console.log("\nLista de Tarefas:");
   tasks.forEach((task, index) => {
     console.log(`[${index}] ${task}`);
   });
@@ -20,7 +20,7 @@ function displayTasks() {
 function addTask(task) {
   try {
     if (task === "") {
-      throw new Error("\nErro: A tarefa não pode estar vazia!\n");
+      throw new Error("\nErro: A tarefa não pode estar vazia!");
     }
     tasks.push(task);
     console.log(`\n"${task}" foi adicionado à lista.`);
@@ -32,8 +32,8 @@ function addTask(task) {
 // Edita uma tarefa existente
 function editTask(id, updatedTask) {
   try {
-    if (!(id != "" && id >= 0 && id < tasks.length && Number.isInteger(id))) {
-      throw new Error(`\nErro: ID inválido.\n`);
+    if (id < 0 || id >= tasks.length || !Number.isInteger(id)) {
+      throw new Error(`\nErro: ID inválido.`);
     }
     if (updatedTask === "") {
       throw new Error(
@@ -50,14 +50,13 @@ function editTask(id, updatedTask) {
 // Remove uma tarefa com base em seu ID
 function removeTask(id) {
   try {
-    if (id >= 0 && id < tasks.length) {
-      const removedTask = tasks.splice(id, 1);
-      console.log(`\nTarefa [${id}] "${removedTask}" removida.`);
-    } else {
-      throw new Error("Erro: ID inválido.");
+    if (id < 0 || id >= tasks.length || !Number.isInteger(id)) {
+      throw new Error(`\nErro: ID inválido.`);
     }
+    const removedTask = tasks.splice(id, 1);
+    console.log(`\nTarefa [${id}] "${removedTask}" removida.`);
   } catch (e) {
-    console.error(e.message);
+    console.log(e.message);
   }
 }
 
@@ -67,10 +66,9 @@ function getTaskById(id) {
     if (id < 0 || id >= tasks.length || !Number.isInteger(id)) {
       throw new Error("\nErro: ID inválido.\n");
     }
-    return tasks[id];
+    console.log(`\n[${id}]: ${tasks[id]}`);
   } catch (e) {
     console.log(e.message);
-    return null;
   }
 }
 
@@ -90,17 +88,27 @@ function promptForAction() {
         case "2":
           rl.question("Digite o ID da tarefa a ser editada: ", (id) => {
             rl.question("Digite a tarefa atualizada: ", (updatedTask) => {
-              editTask(Number(id), updatedTask);
-              displayTasks();
-              promptForAction();
+              if (id != "") {
+                editTask(Number(id), updatedTask);
+                displayTasks();
+                promptForAction();
+              } else {
+                console.log("\nErro: O ID não pode ser vazio\n");
+                promptForAction();
+              }
             });
           });
           break;
         case "3":
           rl.question("Digite o ID da tarefa a ser removida: ", (id) => {
-            removeTask(Number(id));
-            displayTasks();
-            promptForAction();
+            if (id != "") {
+              removeTask(Number(id));
+              displayTasks();
+              promptForAction();
+            } else {
+              console.log("\nErro: O ID não pode ser vazio\n");
+              promptForAction();
+            }
           });
           break;
         case "4":
@@ -109,10 +117,13 @@ function promptForAction() {
           break;
         case "5":
           rl.question("Digite o ID da tarefa que você quer obter: ", (id) => {
-            const task = getTaskById(Number(id));
-            console.log(`Tarefa [${id}]: ${task}`);
-            console.log();
-            promptForAction();
+            if (id != "") {
+              getTaskById(Number(id));
+              promptForAction();
+            } else {
+              console.log("\nErro: O ID não pode ser vazio\n");
+              promptForAction();
+            }
           });
           break;
         case "0":
