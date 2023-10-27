@@ -16,17 +16,33 @@ function displayTasks() {
 }
 
 function addTask(task) {
-  tasks.push(task);
-  console.log(`\n"${task}" foi adicionado à lista.`);
+  try {
+    if (task==="") {
+      throw new Error("\nErro: A tarefa não pode estar vazia!\n")
+    }
+    tasks.push(task);
+    console.log(`\n"${task}" foi adicionado à lista.`);
+  } catch (e) {
+    console.log(e.message)
+  }
+  
 }
 
 function editTask(id, updatedTask) {
-  if (id >= 0 && id < tasks.length) {
+ try {
+    if (!(id != "" && id >= 0 && id < tasks.length && Number.isInteger(id) )){
+      throw new Error(`\nErro: ID inválido.\n`);
+    } 
+    if (updatedTask === "") {
+      throw new Error("\nErro: A atualização da tarefa não pode estar vazia!\n")
+    }
     tasks[id] = updatedTask;
     console.log(`\nTarefa [${id}] atualizada para "${updatedTask}".`);
-  } else {
-    console.log(`ID inválido.`);
-  }
+ } catch (e) {
+      console.log(e.message)
+
+ } 
+
 }
 
 function removeTask(id) {
