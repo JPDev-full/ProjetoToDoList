@@ -55,10 +55,15 @@ function removeTask(id) {
 }
 
 function getTaskById(id) {
-  if (id >= 0 && id < tasks.length) {
+  try {
+    if (id < 0 || id >= tasks.length || !Number.isInteger(id)) {
+      throw new Error("\nErro: ID inválido.\n");
+    }
     return tasks[id];
+  } catch (e) {
+    console.log(e.message);
+    return null;
   }
-  return null;
 }
 
 function promptForAction() {
